@@ -50,7 +50,8 @@ setupIonicReact();
 
 const App: React.FC = () => (
   <IonApp>
-    <IonReactRouter>
+    {/* basename lets the app run in a sub-folder, like GitHub Pages' /ionic-pwa/ */}
+    <IonReactRouter basename={import.meta.env.BASE_URL.replace(/\/$/, '') || '/'}>
       <IonTabs>
         <IonRouterOutlet>
           <Route path="/tab1" element={<Tab1 />} />

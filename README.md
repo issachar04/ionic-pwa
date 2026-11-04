@@ -2,6 +2,8 @@
 
 A basic Ionic React app (tabs starter) that is also a **PWA**: it can be installed like a phone app and it still opens with no internet.
 
+**Live site:** https://issachar04.github.io/ionic-pwa/ (open it on your phone and choose **Add to Home screen** or **Install app**).
+
 ## Run it
 
 ```bash
@@ -109,3 +111,17 @@ The build prints `PWA v2.0.0 ... files generated dist/sw.js`. Then, in Chrome or
 5. Click the **Install** icon in the address bar to install it like an app.
 
 A PWA needs **HTTPS** to install, except on `localhost`. A GitHub Codespace address or GitHub Pages both use HTTPS.
+
+## Put it online with GitHub Pages
+
+GitHub Pages serves the app from a sub-folder (`/ionic-pwa/`), so three small changes make it work there:
+
+1. **`vite.config.ts`**: `base: process.env.BASE_PATH || '/'` builds the app for the sub-folder when `BASE_PATH` is set.
+2. **`index.html`**: `<base href="%BASE_URL%" />` uses that same sub-folder.
+3. **`src/App.tsx`**: `<IonReactRouter basename={import.meta.env.BASE_URL.replace(/\/$/, '') || '/'}>` makes the tab links include the sub-folder.
+
+Then:
+
+1. On GitHub, open the repository's **Settings > Pages** and set **Source** to **GitHub Actions**.
+2. Push to `main`. The workflow in `.github/workflows/deploy.yml` builds the app with `BASE_PATH=/<repo name>/`, copies `index.html` to `404.html` (so links like `/tab2` still open the app), and publishes it.
+3. Watch it in the **Actions** tab. When it's green, the site is at `https://<your-username>.github.io/<repo-name>/`.
